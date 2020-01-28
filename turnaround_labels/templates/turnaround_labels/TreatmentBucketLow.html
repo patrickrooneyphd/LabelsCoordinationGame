@@ -1,0 +1,21 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Rematching Groups
+{% endblock %}
+
+{% block content %}
+
+<p>
+    Based on your answers prior to seeing the first round results, we have determined that you are in the bottom half of
+    employees in this room on measures of hard work and optimism.
+    <br><br>You have been randomly rematched with another set of three employees in this room. These employees are also
+    in the bottom half on measures of hard work and optimism. Within this new firm, you will now complete another 10
+    rounds of data entry.
+    <br><br>Please click next to advance to the next page.
+</p>
+
+    {% next_button %}
+
+{% endblock %}
