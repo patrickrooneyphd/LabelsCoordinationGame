@@ -33,21 +33,25 @@ class Matrix(Page):
     def is_displayed(self):
         return self.round_number == 1
 
+    def before_next_page(self):
+        self.player.assign_random_number()
+    pass
 
-class AssignNewGroups(Page):
+
+class AssignNewGroupsInfo(Page):
     def is_displayed(self):
         return self.round_number == Constants.num_rounds / 2 + 1
     pass
 
 
-class AssignNewGroupsT(WaitPage):
+class AssignNewGroups(WaitPage):
     wait_for_all_groups = True
 
     def is_displayed(self):
-        return self.round_number == Constants.num_rounds / 2 + 1 and self.participant.vars['condition'] == "Treatment"
+        return self.round_number == Constants.num_rounds / 2 + 1
 
     def after_all_players_arrive(self):
-        self.subsession.assign_new_groups_treatment()
+        self.subsession.assign_new_groups()
     pass
 
 
@@ -75,10 +79,10 @@ class MaintainGroups(WaitPage):
     wait_for_all_groups = True
 
     def is_displayed(self):
-        return self.round_number > (Constants.num_rounds / 2 + 1) and self.participant.vars['condition'] == 'Treatment'
+        return self.round_number > (Constants.num_rounds / 2 + 1)
 
     def after_all_players_arrive(self):
-        self.subsession.assign_new_groups_treatment()
+        self.subsession.assign_new_groups()
     pass
 
 
@@ -112,14 +116,26 @@ class BeliefsAboutOtherPlayers(Page):
     pass
 
 
-class BeliefsWaitPage(WaitPage):
+class BeliefsWaitPageT(WaitPage):
     wait_for_all_groups = True
 
     def is_displayed(self):
-        return self.round_number == 1
+        return self.round_number == 1 and self.participant.vars['condition'] == 'Treatment'
 
     def after_all_players_arrive(self):
-        self.subsession.assign_buckets()
+        self.subsession.assign_belief_buckets()
+    pass
+
+
+class BeliefsWaitPageC(WaitPage):
+    wait_for_all_groups = True
+
+    def is_displayed(self):
+        return self.round_number == 1 and self.participant.vars['condition'] == 'Control'
+
+    def after_all_players_arrive(self):
+        self.subsession.assign_belief_buckets()
+        self.subsession.assign_second_half_control_groupings()
     pass
 
 
@@ -136,19 +152,9 @@ class Results(Page):
     pass
 
 
-class ManipulationChecks(Page):
-    form_model = 'player'
-    form_fields = ['manip_1', 'manip_2', 'manip_3', 'manip_4', 'manip_5']
-
-    def is_displayed(self):
-        return self.round_number == Constants.num_rounds
-
-    pass
-
-
 class Questionnaire(Page):
     form_model = 'player'
-    form_fields = ['age', 'gender', 'race', 'major', 'religion', 'volunteer', 'donate', 'first_pd_strategy',
+    form_fields = ['age', 'gender', 'race', 'volunteer', 'donate', 'first_pd_strategy',
                    'later_pd_strategy', 'zero_opinion', 'four_opinion', 'second_firm_feelings',
                    'later_second_firm_feelings']
 
@@ -212,8 +218,8 @@ class FinalPayment(Page):
             'payoff_a': self.participant.vars['payoff_a'],
             'paying_round_b': self.participant.vars['paying_round_b'],
             'payoff_b': self.participant.vars['payoff_b'],
-            'point_payoff': self.participant.vars['payoff_a'] + self.participant.vars['payoff_b'] +
-                            self.participant.vars['bonus'],
+            'point_payoff': self.participant.payoff_plus_participation_fee(),
+            'payoff': self.participant.payoff,
             'risk_payoff': self.participant.vars['risk_payoff'],
             'amb_payoff': self.participant.vars['amb_payoff'],
             'bonus': self.participant.vars['bonus'],
@@ -232,11 +238,11 @@ class Thanks(Page):
 
 page_sequence = [
     Introduction,
-    # Practice,
+    Practice,
     WaitForInstructions,
     Matrix,
+    AssignNewGroupsInfo,
     AssignNewGroups,
-    AssignNewGroupsT,
     TreatmentBucketHigh,
     TreatmentBucketLow,
     ControlBucket,
@@ -244,9 +250,9 @@ page_sequence = [
     Round,
     ResultsWaitPage,
     BeliefsAboutOtherPlayers,
-    BeliefsWaitPage,
+    BeliefsWaitPageT,
+    BeliefsWaitPageC,
     Results,
-    ManipulationChecks,
     Questionnaire,
     AversionPage,
     OpenComments,

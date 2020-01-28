@@ -8,7 +8,6 @@
 {% block content %}
 
 <p>
-    <br><b><u>Debriefing Sheet</u></b>
     <br><br><b>Title:</b> Economic Experiment
     <br><br><b>Researcher:</b> Patrick Rooney
     <br><br><b>Supervisor:</b> Nicola Lacetera
@@ -38,22 +37,45 @@
     strategic uncertainty in the workplace.
 
 <br><br><br><br><b>Comprehension Check</b>
+<br><br>Please enter A, B, or C into the text boxes below to record your answers. <b>You must use capital letters.</b>
+You may not advance until you correctly answer all questions.
 <br><br>1. What is one of this study's general topic areas?
-<br>{% formfield debrief_1 %}
+<br>A: Strategy
+<br>B: Operations
+<br>C: Finance
+<br>{% formfield player.debrief_1 %}
 <br><br>2. What is one dependent variable of this study?
-<br>{% formfield debrief_2 %}
+<br>A: Number of Sentences Typed
+<br>B: Charitable Incentives
+<br>C: Group Size
+<br>{% formfield player.debrief_2 %}
 <br><br>3. What is the treatment group in this study?
-<br>{% formfield debrief_3 %}
+<br>A: Self-Payment
+<br>B: Charity Payment
+<br>C: Those sorted by initial beliefs and actions
+<br>{% formfield player.debrief_3 %}
 <br><br>4. What was the control group in this study?
-<br>{% formfield debrief_4 %}
+<br>A: Those not sorted by initial beliefs and actions
+<br>B: Charity Payment
+<br>C: Group Size
+<br>{% formfield player.debrief_4 %}
 <br><br>5. What is one hypothesis of this study?
-<br>{% formfield debrief_5 %}
+<br>A: Groups with individuals with initial positive beliefs and actions will coordinate better in the second half
+compared to those who are not sorted based on their initial beliefs and actions.
+<br>B: Individuals in the treatment group will decide to stop playing in the middle of the experiment because they
+are ethically disturbed by the game.
+<br>C: Individuals will be more likely to choose a job with an NGO following the experiment
+<br>{% formfield player.debrief_5 %}
 <br><br>6. What makes an economic experiment different from a psychology experiment?
-<br>{% formfield debrief_6 %}
+<br>A: Economics experiments are always only a half an hour long, while psychology experiments can be of any length.
+<br>B: Economics experiments are always incentivized and do not practice deception, and psychology experiments may
+involve deception and are often not incentivized.
+<br>C: Economics experiments are always about financial markets, whereas psychology experiments are always about
+individual mental processes.
+<br>{% formfield player.debrief_6 %}
     </p>
 
-{% next_button %}
+    <button class="otree-btn-next btn btn-primary next-button otree-next-button">Verify Answers</button>
 
 {% endblock %}
-
 

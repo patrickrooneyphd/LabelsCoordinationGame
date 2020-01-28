@@ -16,9 +16,8 @@ SESSION_CONFIGS = [
     {
         'name': 'turnaround_labels',
         'display_name': "Labels and Turnarounds",
-        'num_demo_participants': 8,
+        'num_demo_participants': 16,
         'app_sequence': ['turnaround_labels'],
-        'real_world_currency_per_point': 0.025,  # 1/40 since points range from 200-320 ($5 to $8 per paid round)
         'use_browser_bots': False
     },
 ]
@@ -33,7 +32,6 @@ LANGUAGE_CODE = 'en'
 REAL_WORLD_CURRENCY_CODE = 'USD'
 USE_POINTS = True
 POINTS_DECIMAL_PLACES = 0
-REAL_WORLD_CURRENCY_DECIMAL_PLACES = 2
 
 ROOMS = [
     dict(

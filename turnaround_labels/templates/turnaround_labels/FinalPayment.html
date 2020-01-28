@@ -8,7 +8,7 @@
 
 {% block content %}
 <p>
-    <br><br><br><b><center>************* PLEASE STOP WORK AND RAISE YOUR HAND *************</center></b>
+    <br><br><br><b><center>************* PLEASE STOP WORK *************</center></b>
 <br><br><br><b>The computer has randomly chosen the following rounds for payment:</b>
 <br><br><table class="table">
     <tr>
@@ -26,7 +26,7 @@
 </table>
     <br><br>You received {{ bonus }} in bonus points from the first round guessing game.
     <br>You also earned {{ risk_payoff }} points and {{ amb_payoff }} points from your choices in the questionnaire.
-    <br> Total Earned Points: {{ point_payoff }} points
+    <br><b>Total Earned Points: {{ payoff }}</b>
     <!--<br><br>Your payout is equal to (# points)/40 and rounded to the nearest whole dollar value. -->
     <br><br>The computer has ranked all participants in this session by points scored. You will be paid based on your
     your rank in this session.
@@ -53,7 +53,7 @@
     </tr>
 </table>
     <br><br>Rank: {{ rank }}
-    <br><b/>Total Payout: {{ payoff_display }}</b>
+    <br><b/>Total Payout: ${{ payoff_display }}</b>
     <br><br><br><br><b><u>Final Steps</u></b>
     <br><br><b>(1)</b> Please wait until the lab facilitator has come to your seat to pay you.
     <br><br><b>(2)</b> Once you have been paid, please sign the researcher's receipt document.
@@ -63,13 +63,3 @@
 
 {% endblock %}
 
-
-{% block styles %}
-
-    <style>
-    body {
-        background-color: #F08080;
-    }
-    </style>
-
-{% endblock %}
