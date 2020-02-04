@@ -1,0 +1,80 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Debriefing Sheet
+{% endblock %}
+
+{% block content %}
+
+<p>
+    <br><br><b>Title:</b> Economic Experiment
+    <br><br><b>Researcher:</b> Patrick Rooney
+    <br><br><b>Supervisor:</b> Nicola Lacetera
+    <br><br><b>Phone Number:</b> 416-978-4154 (Ask for Patrick)
+    <br><br><b>Room Number:</b> BRL Main Lab Room, Rotman School of Management, University of Toronto
+    <br><br><b>Areas of Research:</b> Strategy, Organizational Behaviour
+    <br><br><b>Brief Summary:</b> Management and economics research has investigated how organizations can improve
+    coordination in environments in which coordination is challenging (e.g., Van Huyck et al., 1990; Weber et al.,
+    2001). Prior research has shown that increasing bonuses (Brandts and Cooper, 2006) and pre-play communication
+    (Chen and Chen, 2011) can improve groups' ability to choose matching numbers. This study looks at how giving people
+    the ability to chat before working impacts their <b>actual</b> ability to
+    coordinate in a work task that requires participants to exert effort. The experiment you completed today is a
+    pilot study that will be used to check whether participants understand the game, understand the purpose of the
+    experiment, and can navigate the program easily. It is important to note that economics experiments always
+    use incentives to approximate how organizations and markets encourage people to make decisions. Moreover,
+    economics experiments also have a non-deception policy, so experimenters cannot 'lie' in describing the
+    experimental tasks or goals. Psychology experiments are often unincentivized and sometimes involve deception.
+    <br><br><b>Specific Hypothesis Tested (H1):</b> Groups that have the ability to chat before playing their round
+    will coordinate better than those who were not given the ability to chat.
+    <br><br><b>Independent Variables:</b> Group membership (chat v. no chat).
+    <br><br><b>Dependent Variables:</b> Individual sentences typed and minimum of group sentences typed.
+    <br><br><b>Control procedures:</b> Those who were told to write "long reflections" were in the control group, and
+    those who were given the opportunity to chat were in the treatment group.
+    <br><br><b>Implications for theory/practice:</b> Understanding the reasons why individuals actually coordinate in
+    groups will give us a better understanding into how firms build sustainable cultures that reduce general levels of
+    strategic uncertainty in the workplace.
+
+<br><br><br><br><b>Comprehension Check</b>
+<br><br>Please enter A, B, or C into the text boxes below to record your answers. <b>You must use capital letters.</b>
+You may not advance until you correctly answer all questions.
+<br><br>1. What is one of this study's general topic areas?
+<br>A: Strategy
+<br>B: Operations
+<br>C: Finance
+<br>{% formfield player.debrief_1 %}
+<br><br>2. What is one dependent variable of this study?
+<br>A: Number of Sentences Typed
+<br>B: Charitable Incentives
+<br>C: Group Size
+<br>{% formfield player.debrief_2 %}
+<br><br>3. What is the treatment group in this study?
+<br>A: Those with the ability to type
+<br>B: Charity Payment
+<br>C: Those given the ability to chat
+<br>{% formfield player.debrief_3 %}
+<br><br>4. What was the control group in this study?
+<br>A: Those not given the ability to chat
+<br>B: Charity Payment
+<br>C: Group Size
+<br>{% formfield player.debrief_4 %}
+<br><br>5. What is one hypothesis of this study?
+<br>A: Groups that are allowed to chat before playing a round will coordinate better in the second half
+compared to those who are not allowed to chat before playing a round.
+<br>B: Individuals in the treatment group will decide to stop playing in the middle of the experiment because they
+are ethically disturbed by the game.
+<br>C: Individuals will be more likely to choose a job with an NGO following the experiment
+<br>{% formfield player.debrief_5 %}
+<br><br>6. What makes an economic experiment different from a psychology experiment?
+<br>A: Economics experiments are always only a half an hour long, while psychology experiments can be of any length.
+<br>B: Economics experiments are always incentivized and do not practice deception, and psychology experiments may
+involve deception and are often not incentivized.
+<br>C: Economics experiments are always about financial markets, whereas psychology experiments are always about
+individual mental processes.
+<br>{% formfield player.debrief_6 %}
+    </p>
+
+    <button class="otree-btn-next btn btn-primary next-button otree-next-button">Verify Answers</button>
+
+{% endblock %}
+

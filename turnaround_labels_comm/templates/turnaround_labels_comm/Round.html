@@ -1,0 +1,40 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Round {{ subsession.round_number }} of {{ Constants.num_rounds }}
+{% endblock %}
+
+{% block content %}
+
+<p>
+    <body oncopy="return false" oncut="return false" onpaste="return false">
+    <img src="{% static 'labelscoordgame/wlg_ab_control.png' %}"/>
+    <br><br>Please work on typing sentences or writing a reflection about this session.
+    <br><br>Type your sentences in the spaces that follow. Make sure to end each with a period (".").
+    <br><br>{% formfield player.submitted_answer1 %}
+    <br><br>{% formfield player.submitted_answer2 %}
+    <br><br>{% formfield player.submitted_answer3 %}
+    <br><br>{% formfield player.submitted_answer4 %}
+    <br><br>Type your written reflection here: {% formfield player.reflection %}
+    </body>
+</p>
+
+    {% next_button %}
+
+{% endblock %}
+
+{% block scripts %}
+<css>
+    preventcopy class
+
+    .preventcopy {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+}
+</css>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Practice
+    <!-- Adapted from Brandts and Cooper (2006, AER) 'A Change Would Do You Good' Appendix-->
+{% endblock %}
+
+{% block content %}
+    <p>
+        Below are some questions about the experiment. You will be unable to advance until you answer them correctly.
+        Please raise your hand if you have any questions.
+        <br><br><b>Earnings Calculation</b>
+        <br> Please answer the following questions. Remember that <u>you</u> may be the employee with the smallest
+        number of sentences in your firm!
+        <br><br><img src="{% static 'labelscoordgame/wlg_ab_control.png' %}"/>
+        <br><br>1. Suppose <b>you chose to correctly type 1 sentence </b> and spend the remainder of your time writing a
+        reflection. The other employees in your group <b> correctly type 3, 2, and 4 sentences </b> respectively.
+        <br><br>The number of correct sentences you typed: {% formfield player.practice_response_a %}
+        The smallest number of correct sentences in your firm: {% formfield player.practice_response1 %}
+        Your payoff in experimental points: {% formfield player.practice_response2 %}
+        <br><br><img src="{% static 'labelscoordgame/wlg_ab_control.png' %}"/>
+        <br><br>2. Suppose <b>you chose to correctly type 2 sentences</b> and spend the remainder of your time writing a
+        reflection. The other employees in your group <b>correctly type 3, 0, and 1 sentences </b>respectively.
+        <br><br>The number of correct sentences you typed: {% formfield player.practice_response_b %}
+        The smallest number of correct sentences in your firm: {% formfield player.practice_response3 %}
+        Your payoff in experimental points: {% formfield player.practice_response4 %}
+        <br><br><img src="{% static 'labelscoordgame/wlg_ab_control.png' %}"/>
+        <br><br>3. Suppose <b>you chose to correctly type 0 sentences</b> and spend the remainder of your time writing a
+        reflection. The other employees in your group <b>correctly type 2, 3, and 1 sentences </b>respectively.
+        <br><br>The number of correct sentences you typed: {% formfield player.practice_response_c %}
+        The smallest number of correct sentences in your firm: {% formfield player.practice_response5 %}
+        Your payoff in experimental points: {% formfield player.practice_response6 %}
+        <br><br><br> <b>True or False</b>
+        <br><br>4. (True or False) You will work in two firms during this session: one for the first half, and one for
+        the second half.
+        <br>{% formfield player.true_false1 %}
+        <br><br>5. (True or False) Your identity, choices, and earnings will remain anonymous throughout this session.
+        <br>{% formfield player.true_false2 %}
+    </p>
+        <button class="otree-btn-next btn btn-primary next-button otree-next-button">Verify Answers</button>
+        </br></br>
+
+
+{% endblock %}

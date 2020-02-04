@@ -1,0 +1,19 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Second Part
+{% endblock %}
+
+{% block content %}
+<p>
+    <br><br>You have been randomly rematched with another set of three employees in this room for the final five rounds
+    of data entry. These rounds will be identical to the previous rounds except for one difference. Now, before each
+    round, <b> you will be able to chat with the other three employees in your group. </b> You will have one minute to
+    chat before each round. You will be assigned a random player number each round within the chat room, and your chat
+    will remain anonymous.
+    <br><br>Please click next to advance to the next page.
+</p>
+    {% next_button %}
+
+{% endblock %}

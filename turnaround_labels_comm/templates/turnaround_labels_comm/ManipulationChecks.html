@@ -1,0 +1,26 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Questions about this Experiment
+{% endblock %}
+
+{% block content %}
+
+<p>
+    <br><br><b>Please write one or two sentences to answer each of the following questions. </b>
+    <br><br> What did you do in this experiment?
+    <br>{% formfield player.manip_1 %}
+    <br><br> What was your strategy going into this experiment?
+    <br>{% formfield player.manip_2 %}
+    <br><br> Did your strategy change after you completed a few periods of work?
+    <br>{% formfield player.manip_3 %}
+    <br><br> Did your strategy change for the second half of the experiment? Why or why not?
+    <br>{% formfield player.manip_4 %}
+    <br><br> What was your strategy for the coin flip and red ball/black ball questions?
+    <br>{% formfield player.manip_5 %}
+</p>
+
+{% next_button %}
+
+{% endblock %}

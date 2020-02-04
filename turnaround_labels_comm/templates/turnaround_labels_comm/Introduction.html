@@ -1,0 +1,63 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Introduction
+{% endblock %}
+
+{% block content %}
+
+    <p>
+        Welcome to this lab session. The lab facilitator will read the instructions aloud. Please listen carefully to
+        the instructions.
+        <br><br>As you know from our note to you, you are about to participate in an economic experiment in which you
+        will earn class credit and real money. Please read these instructions carefully, since you will only see this
+        page once. The experiment consists of a set of strategic tasks on your computer. Your identity and the decisions
+        you make will remain anonymous to the researchers and all other participants in this experiment. The other
+        participants in this room are reading the same instructions page as you are.
+        <br><br>You have been assigned the role of an employee in a data entry firm. Everyone in this room has been
+        randomly sorted into firms of four employees. There is mutual anonymity within the firm: you will not know the
+        identity of your fellow employees, and they will not know your identity. Your firm will consist of the same four
+        employees for the first part of the experiment. In round 11, employees will be reassigned to firms, and you will
+        work with this new firm for the second part of the experiment.
+        <br><br>There are two firm activities: entering sentences and writing reflections. In each round of work, all of
+        the employees in your firm will be presented with the same four sentences and four text entry lines. Below these
+        sentences, there will be a larger text box in which you can type a reflection on your work. Each round of work
+        lasts one minute. Sentences will only be counted if all words in the sentence are spelled correctly and correct
+        punctuation is used (including periods at the end of sentences). Please note that copy/paste has been disabled
+        on these pages, so text entry must be completed by hand.
+        <br><br>Your firm will complete 15 rounds of work divided into a first part and a second part. Your earnings
+        in each round depend on <b>the number of sentences you correctly complete and the smallest number of sentences
+        among employees in your firm.</b> The earnings table for the entire session is shown below. Note that you will
+        only earn points based on the number of sentences you and your group produce; reflections earn no points.
+        <br><br><img src="{% static 'labelscoordgame/wlg_ab_control.png' %}"/>
+        <br><br>To understand how point earnings are calculated, consider this interactive example [with instructions in
+        brackets]: suppose that you correctly complete 3 sentences [put your finger on the '3' under 'Your Sentences']
+        and that the smallest number of correct sentences in your firm is 2 [slide your finger along the row until it is
+        under the '2' column of 'Minimum of Firm Sentences']. Your earnings in this round would be 170 points. You will
+        answer similar questions on the next page as practice.
+        <br><br>After 15 rounds of work, you will be asked to fill out a short questionnaire. Following the
+        questionnaire, the computer will randomly select one round from each of the two parts for payment. Your
+        final earnings will be converted from points into dollars based on how your performance ranks among all
+        participants in this room. You will then sign a receipt and be dismissed.
+        <br><br>This experiment should take around 45 minutes to complete, and you will receive 1 hour of credit.
+        Please carefully read the following statement. Upon typing "I consent" and clicking next, you will advance to
+        a page in which you will complete practice tasks.
+        <br><br><br><b>NOTE: </b>This experiment requires the informed consent of participants. This survey is part of
+        an academic project conducted by researchers at the University of Toronto. Your identity will remain anonymous,
+        and any data gathered will not be identifiable. You may withdraw from this experiment at any time by exiting
+        your browser. If you choose to withdraw, your data will not be retained and will be immediately destroyed. If
+        you have any questions about this study, please contact the research supervisor, Nicola Lacetera, at
+        nicola.lacetera@utoronto.ca. If you have concerns about any harmful ethical implications of this research,
+        please reach out to ethics@utoronto.ca.
+        </br></br>
+    <b>If you agree to participate, indicate your consent by typing "I consent" (without quotes) into the box below.
+    </b> {% formfield player.consent %}
+        </br></br>
+        <button class="otree-btn-next btn btn-primary next-button otree-next-button">Next</button>
+
+    </p>
+
+{% endblock %}
+
+

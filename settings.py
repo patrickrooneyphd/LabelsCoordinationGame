@@ -20,6 +20,20 @@ SESSION_CONFIGS = [
         'app_sequence': ['turnaround_labels'],
         'use_browser_bots': False
     },
+    {
+        'name': 'turnaround_labels_comm',
+        'display_name': "Labels and Turnarounds_comm",
+        'num_demo_participants': 16,
+        'app_sequence': ['turnaround_labels_comm'],
+        'use_browser_bots': False
+    },
+    {
+        'name': 'turnaround_labels_pun',
+        'display_name': "Labels and Turnarounds_pun",
+        'num_demo_participants': 16,
+        'app_sequence': ['turnaround_labels_pun'],
+        'use_browser_bots': False
+    },
 ]
 # see the end of this file for the inactive session configs
 
@@ -35,12 +49,12 @@ POINTS_DECIMAL_PLACES = 0
 
 ROOMS = [
     dict(
-        name='BRL_LabelsCoordinationGame',
-        display_name='BRL_LabelsCoordinationGame',
+        name='BRL_EconomicGameExperiment',
+        display_name='BRL_EconomicGameExperiment',
     ),
     dict(
-        name='TEEL_LabelsCoordinationGame',
-        display_name='TEEL_LabelsCoordinationGame',
+        name='TEEL_EconomicGameExperiment',
+        display_name='TEEL_EconomicGameExperiment',
     ),
 ]
 

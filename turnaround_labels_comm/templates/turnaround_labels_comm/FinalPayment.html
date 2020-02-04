@@ -1,0 +1,65 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Final Payment
+{% endblock %}
+
+
+{% block content %}
+<p>
+    <br><br><br><b><center>************* PLEASE STOP WORK *************</center></b>
+<br><br><br><b>The computer has randomly chosen the following rounds for payment:</b>
+<br><br><table class="table">
+    <tr>
+        <th>Round</th>
+        <th>Payoff</th>
+    </tr>
+    <tr>
+        <td>{{ paying_round_a }}</td>
+        <td>{{ payoff_a }} points</td>
+    </tr>
+    <tr>
+        <td>{{ paying_round_b }}</td>
+        <td>{{ payoff_b }} points</td>
+    </tr>
+</table>
+    <br><br>You received {{ bonus }} in bonus points from the first round guessing game.
+    <br>You also earned {{ risk_payoff }} points and {{ amb_payoff }} points from your choices in the questionnaire.
+    <br><b>Total Earned Points: {{ payoff }}</b>
+    <!--<br><br>Your payout is equal to (# points)/40 and rounded to the nearest whole dollar value. -->
+    <br><br>The computer has ranked all participants in this session by points scored. You will be paid based on your
+    your rank in this session.
+<table class="table">
+    <tr>
+        <th>Rank</th>
+        <th>Payoff</th>
+    </tr>
+    <tr>
+        <td>1 - 2</td>
+        <td>$5.00</td>
+    </tr>
+    <tr>
+        <td>3 - 6</td>
+        <td>$4.00</td>
+    </tr>
+    <tr>
+        <td>7 - 10</td>
+        <td>$3.00</td>
+    </tr>
+    <tr>
+        <td>11 - 16</td>
+        <td>$2.00</td>
+    </tr>
+</table>
+    <br><br>Rank: {{ rank }}
+    <br><b/>Total Payout: ${{ payoff_display }}</b>
+    <br><br><br><br><b><u>Final Steps</u></b>
+    <br><br><b>(1)</b> Please wait until the lab facilitator has come to your seat to pay you.
+    <br><br><b>(2)</b> Once you have been paid, please sign the researcher's receipt document.
+    <br><br><b>(3)</b> Please click the button below to submit your choices and confirm payment.
+    <br><br><button class="otree-btn-next btn btn-primary next-button otree-next-button">Confirm Payment</button>
+</p>
+
+{% endblock %}
+
