@@ -169,9 +169,6 @@ class Questionnaire(Page):
 
     def is_displayed(self):
         return self.round_number == Constants.num_rounds
-
-    def before_next_page(self):
-        self.player.add_bonus()
     pass
 
 
@@ -183,6 +180,7 @@ class AversionPage(Page):
         return self.round_number == Constants.num_rounds
 
     def before_next_page(self):
+        self.player.add_bonus()
         self.player.extra_payments()
     pass
 
@@ -247,7 +245,7 @@ class Thanks(Page):
 
 page_sequence = [
     Introduction,
-    # Practice,
+    Practice,
     WaitForInstructions,
     Matrix,
     AssignNewGroupsInfo,

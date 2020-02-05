@@ -81,11 +81,6 @@ class ChatWait(WaitPage):
 class Communication(Page):
     timeout_seconds = 60
 
-    def vars_for_template(self):
-        return {
-            'chat_nickname': self.player.chat_nickname(),
-        }
-
     def is_displayed(self):
         return self.round_number > (Constants.num_roundsr / 2) and self.participant.vars['condition'] == 'Treatment'
     pass
@@ -163,9 +158,6 @@ class Questionnaire(Page):
 
     def is_displayed(self):
         return self.round_number == Constants.num_rounds
-
-    def before_next_page(self):
-        self.player.add_bonus()
     pass
 
 
@@ -177,6 +169,7 @@ class AversionPage(Page):
         return self.round_number == Constants.num_rounds
 
     def before_next_page(self):
+        self.player.add_bonus()
         self.player.extra_payments()
     pass
 

@@ -1,0 +1,17 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Chat
+{% endblock %}
+
+{% block content %}
+
+    <p>
+        Below is a chat box in which you can anonymously communicate with other employees in your firm.
+        <br><br>{% chat %}
+    </p>
+
+{% endblock %}
+
+

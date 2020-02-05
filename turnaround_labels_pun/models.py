@@ -5,7 +5,6 @@ from otree.api import (
 
 import numpy as np
 import random
-import itertools
 
 author = 'Patrick Rooney'
 
@@ -99,7 +98,6 @@ class Subsession(BaseSubsession):
             ]
             group_matrix.append(new_group)
 
-        print(group_matrix)
         self.set_group_matrix(group_matrix)
 
     def assign_payoff_display(self):
@@ -175,7 +173,6 @@ class Group(BaseGroup):
     def show_result(self):
         players = self.get_players()
         counters = [p.counter for p in players]
-        print(counters)
         count_a = counters.count('A')
         count_b = counters.count('B')
         count_x = counters.count('X')
@@ -458,6 +455,5 @@ class Player(BasePlayer):
         self.participant.vars['risk_payoff'] = self.risk_payoff_str
         self.amb_payoff_str = '{:,.0f}'.format(self.amb_payoff)
         self.participant.vars['amb_payoff'] = self.amb_payoff_str
-
 
     pass

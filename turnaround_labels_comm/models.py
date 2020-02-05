@@ -5,7 +5,6 @@ from otree.api import (
 
 import numpy as np
 import random
-import itertools
 
 author = 'Patrick Rooney'
 
@@ -40,13 +39,14 @@ class Subsession(BaseSubsession):
     def creating_session(self):
         if self.round_number == 1:
             # Set Paying Rounds and Randomly Assign Condition s#
-            paying_round_a = random.randint(1, Constants.num_roundsr/2)
-            paying_round_b = random.randint(Constants.num_roundsr/2 + 1,  Constants.num_rounds)
+            paying_round_a = random.randint(1, Constants.num_roundsr / 2)
+            paying_round_b = random.randint(Constants.num_roundsr / 2 + 1,  Constants.num_rounds)
             for p in self.get_players():
                 p.paying_round_a = paying_round_a
                 p.paying_round_b = paying_round_b
                 p.participant.vars['paying_round_a'] = paying_round_a
                 p.participant.vars['paying_round_b'] = paying_round_b
+                p.participant.vars['condition'] = 'Initialize'
             # Group Randomly in Round 1.  Maintain previous rounds' groups o/w #
             self.group_randomly()
         else:
@@ -98,7 +98,6 @@ class Subsession(BaseSubsession):
             ]
             group_matrix.append(new_group)
 
-        print(group_matrix)
         self.set_group_matrix(group_matrix)
 
     def assign_payoff_display(self):
@@ -354,24 +353,15 @@ class Player(BasePlayer):
         else:
             self.participant.vars['bonus'] = 0
 
+    def calculate_index(self):
+        average_guess = (self.guess1 + self.guess2 + self.guess3) / 3
+        self.belief_index = average_guess
+
     def add_bonus(self):
         if self.participant.vars['bonus'] == Constants.bonus:
             self.payoff = self.payoff + Constants.bonus
         else:
             self.payoff = self.payoff
-
-    def calculate_index(self):
-        average_guess = (self.guess1 + self.guess2 + self.guess3) / 3
-        self.belief_index = average_guess
-
-    def role_select(self):
-        roles = (['Player P', 'Player Q', 'Player R', 'Player S', 'Player T', 'Player U', 'Player V', 'Player W'])
-        random.shuffle(roles)
-        role_iter = itertools.cycle(roles)
-        return next(role_iter)
-
-    def chat_nickname(self):
-        return '{}'.format(self.role_select())
 
     # == Calculate Risk and Ambiguity Aversion Payoffs == #
     def extra_payments(self):
@@ -416,6 +406,5 @@ class Player(BasePlayer):
         self.participant.vars['risk_payoff'] = self.risk_payoff_str
         self.amb_payoff_str = '{:,.0f}'.format(self.amb_payoff)
         self.participant.vars['amb_payoff'] = self.amb_payoff_str
-
 
     pass

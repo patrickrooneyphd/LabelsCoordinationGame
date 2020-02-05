@@ -45,7 +45,8 @@ class Subsession(BaseSubsession):
                 p.paying_round_b = paying_round_b
                 p.participant.vars['paying_round_a'] = paying_round_a
                 p.participant.vars['paying_round_b'] = paying_round_b
-            conditions = ['Control', 'Treatment']
+            # conditions = ['Control', 'Treatment']
+            conditions = ['Control']
             random.shuffle(conditions)
             for p in self.get_players():
                 p.participant.vars['condition'] = conditions[0]
@@ -129,7 +130,6 @@ class Subsession(BaseSubsession):
             group_matrix.append(new_group)
 
         self.set_group_matrix(group_matrix)
-        print('Groups have been assigned')
 
     def assign_payoff_display(self):
         players = self.get_players()
@@ -137,11 +137,8 @@ class Subsession(BaseSubsession):
             payoff_list = [p.participant.payoff_plus_participation_fee() for p in players]
             ids = [p.id_in_subsession for p in players]
             dictionary = dict(zip(ids, payoff_list))
-            print(dictionary)
             sorted_dict = dict(sorted(dictionary.items(), key=lambda x: x[1], reverse=True))
             player_ranking = [*sorted_dict]
-            print(player_ranking)
-            print(player_ranking[0])
             p.participant.vars['rank'] = player_ranking.index(p.id_in_subsession) + 1
             five_cutoff = int(self.session.num_participants * (1/8))
             four_cutoff = int(self.session.num_participants * (3/8))
