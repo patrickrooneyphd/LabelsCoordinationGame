@@ -1,0 +1,25 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Vote to Punish
+{% endblock %}
+
+{% block content %}
+
+    <p>
+        You may vote to punish the person with the lowest number of sentences in this round. <b>If the punishment
+        policy is enacted, the employee typing the lowest number of sentences will earn 0 points in the round</b>.
+        If there is more than one employee at the lowest number of sentences, all employees
+        typing the lowest number will be punished. If all employees correctly type 4 sentences, there will be no
+        punishment even if the punishment policy is enacted.
+        <br><br><b>Punishment will be enacted {{ punish_regime }}.</b> The outcome of
+        the vote will be displayed on the results page.
+        <br><br>Would you like to punish the person/people with the lowest number of sentences in this round?
+        <br><br>{% formfield player.vote %}
+    </p>
+
+    {% next_button %}
+{% endblock %}
+
+

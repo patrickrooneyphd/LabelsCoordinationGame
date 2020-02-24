@@ -10,6 +10,7 @@ SESSION_CONFIG_DEFAULTS = {
     'participation_fee': 0,
     'doc': "",
     'points_decimal_places': 0,
+    'real_world_currency_decimal_places': 0
 }
 
 SESSION_CONFIGS = [
@@ -28,10 +29,17 @@ SESSION_CONFIGS = [
         'use_browser_bots': False
     },
     {
-        'name': 'turnaround_labels_pun',
-        'display_name': "Labels and Turnarounds_pun",
+        'name': 'turnaround_labels_pun_bonus',
+        'display_name': "Labels and Turnarounds_pun_bonus",
         'num_demo_participants': 16,
-        'app_sequence': ['turnaround_labels_pun'],
+        'app_sequence': ['turnaround_labels_pun_bonus'],
+        'use_browser_bots': False
+    },
+    {
+        'name': 'turnaround_labels_punish_unan_atleast1',
+        'display_name': "Labels and Turnarounds_punish_unan_atleast1",
+        'num_demo_participants': 16,
+        'app_sequence': ['turnaround_labels_punish_unan_atleast1'],
         'use_browser_bots': False
     },
 ]
@@ -46,6 +54,8 @@ LANGUAGE_CODE = 'en'
 REAL_WORLD_CURRENCY_CODE = 'USD'
 USE_POINTS = True
 POINTS_DECIMAL_PLACES = 0
+REAL_WORLD_CURRENCY_DECIMAL_PLACES = 2
+
 
 ROOMS = [
     dict(
@@ -90,6 +100,22 @@ source, and you can modify them as you wish.
 SECRET_KEY = ')9l4$syir$d@$&ukdtcs6xnzwn3sfraf1fv6c^$*yiyw4%f&!j'
 
 # if an app is included in SESSION_CONFIGS, you don't need to list it here
-INSTALLED_APPS = ['otree', 'django.contrib.auth']
+INSTALLED_APPS = ['otree',
+                  'django.contrib.admin',
+                  'django.contrib.auth',
+                  'django.contrib.contenttypes',
+                  'django.contrib.sessions',
+                  'django.contrib.messages',
+                  'django.contrib.staticfiles',
+                  ]
 INSTALLED_OTREE_APPS = []
 
+MIDDLEWARE_CLASSES = (
+        'django.contrib.sessions.middleware.SessionMiddleware',
+        'django.middleware.common.CommonMiddleware',
+        'django.middleware.csrf.CsrfViewMiddleware',
+        'django.contrib.auth.middleware.AuthenticationMiddleware',
+        'django.contrib.messages.middleware.MessageMiddleware',
+        'django.middleware.clickjacking.XFrameOptionsMiddleware',
+        'django.middleware.security.SecurityMiddleware',
+    )
