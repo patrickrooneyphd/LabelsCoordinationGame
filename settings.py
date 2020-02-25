@@ -45,7 +45,7 @@ SESSION_CONFIGS = [
     {
         'name': 'turnaround_labels_punish_costly',
         'display_name': "Labels and Turnarounds_punish_costly",
-        'num_demo_participants': 8,
+        'num_demo_participants': 16,
         'app_sequence': ['turnaround_labels_punish_costly'],
         'use_browser_bots': False
     },
