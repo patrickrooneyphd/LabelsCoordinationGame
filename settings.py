@@ -42,6 +42,13 @@ SESSION_CONFIGS = [
         'app_sequence': ['turnaround_labels_punish_unan_atleast1'],
         'use_browser_bots': False
     },
+    {
+        'name': 'turnaround_labels_punish_costly',
+        'display_name': "Labels and Turnarounds_punish_costly",
+        'num_demo_participants': 8,
+        'app_sequence': ['turnaround_labels_punish_costly'],
+        'use_browser_bots': False
+    },
 ]
 # see the end of this file for the inactive session configs
 

@@ -1,0 +1,43 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Choices
+{% endblock %}
+
+{% block content %}
+<p>
+    Please select the choice you prefer in each of the following questions.
+    After hitting next, the computer will choose one of these questions at random and will then flip a coin. If the
+    coin is heads and you pick the 50-50 choice, you will get the higher winnings value, and vice-versa. If you pick
+    the “certain” choice, that amount will be your winnings. You will be paid an extra [20 x ($ winnings)] in points at
+    the end of the session. <b>As the questions progress, most (but not all) people begin to prefer the 50-50 choice at
+    some point and do not go back to preferring the "certain" amount</b>.  If you do not feel comfortable answering
+    a question, you may leave it blank.
+    <br><br>{% formfield player.risk1 %}
+    <br><br>{% formfield player.risk2 %}
+    <br><br>{% formfield player.risk3 %}
+    <br><br>{% formfield player.risk4 %}
+    <br><br>{% formfield player.risk5 %}
+    <br><br><br>The following questions ask you to choose between two bags that each contain 20 balls of two colors:
+    red and black. In the first bag, it is unknown which portion are black and which are red. The other bag has
+    known proportions of red and black balls. You will make choices about which bag you prefer given different color
+    breakdowns in the "known proportions" bag. After you enter your choices, the computer will randomly determine how
+    many red and black balls are in the "unknown proportions" bag. Then, the computer will randomly select one
+    question and one ball from your preferred bag in that question. If the computer chooses a red ball, you will win
+    an extra 200 points. If the computer chooses a black ball, you will win an extra 40 points.<b>Most (but not all)
+    people "switch" at most one time from preferring the bags of known proportions to the bag of unknown
+    proportions.</b>
+    <br><br>{% formfield player.amb1 %}
+    <br><br>{% formfield player.amb2 %}
+    <br><br>{% formfield player.amb3 %}
+    <br><br>{% formfield player.amb4 %}
+    <br><br>{% formfield player.amb5 %}
+    <br><br>{% formfield player.amb6 %}
+    <br><br>{% formfield player.amb7 %}
+
+</p>
+    {% next_button %}
+{% endblock %}
+
+

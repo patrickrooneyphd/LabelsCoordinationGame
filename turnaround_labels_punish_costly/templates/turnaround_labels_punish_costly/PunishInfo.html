@@ -1,0 +1,20 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Second Part
+{% endblock %}
+
+{% block content %}
+<p>
+    <br><br>You have been randomly rematched with another set of three employees in this room for the final five rounds
+    of data entry. These rounds will be identical to the previous rounds except for one difference. <b>Now,
+    {{ punish_regime }},  you will be able to vote to punish the person/people who complete the fewest sentences in
+    each round.
+    </b>You will anonymously vote on this punishment after typing the round's sentences. More information will be given
+    on the punishment voting pages.
+    <br><br>Please click next to advance to the next page.
+</p>
+    {% next_button %}
+
+{% endblock %}
