@@ -305,7 +305,7 @@ class Player(BasePlayer):
     risk3 = models.StringField(
         label='',
         widget=widgets.RadioSelect,
-        choices=['$5 for certain', '$10 with probability, $2 with probability 50%'],
+        choices=['$5 for certain', '$10 with probability 50%, $2 with probability 50%'],
         blank=True
     )
     risk4 = models.StringField(
