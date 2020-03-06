@@ -16,15 +16,20 @@ Labels and Turnarounds under Costly Punishment Regimes
 class Constants(BaseConstants):
     name_in_url = 'costpunreg'
     players_per_group = 4
-    num_rounds = 15
-    num_roundsr = 20
-    bonus = 200
+    num_rounds = 12
+    bonus = 10
+    punish_cost = 10
 
     # == Sentences for each round == #
-    solution1 = 'Earnings are public.'
-    solution2 = 'Old products have been replaced.'
-    solution3 = 'The CEO is on vacation.'
-    solution4 = 'Inventory is full.'
+    solution1 = ['Earnings are public.', 'Earnings are public', 'earnings are public', 'earnings are public.']
+    solution2 = ['Old products have been replaced.', 'Old products have been replaced',
+                 'old products have been replaced', 'old products have been replaced.'
+                 ]
+    solution3 = ['The CEO is on vacation.', 'The CEO is on vacation', 'the ceo is on vacation.',
+                 'the ceo is on vacation', 'the Ceo is on vacation', 'the Ceo is on vacation.',
+                 'The ceo is on vacation.', 'The ceo is on vacation',
+                 ]
+    solution4 = ['Inventory is full.', 'Inventory is full', 'inventory is full.', 'inventory is full']
 
     # == Payoff matrices for treatments == #
     payoff_list = np.array([(200, 200, 200, 200, 200),
@@ -39,72 +44,67 @@ class Subsession(BaseSubsession):
     def creating_session(self):
         if self.round_number == 1:
             # Set Paying Rounds#
-            paying_round_a = random.randint(1, Constants.num_roundsr/2)
-            paying_round_b = random.randint(Constants.num_roundsr/2 + 1,  Constants.num_rounds)
-            audit_array = np.arange(11, 16, 1)
-            random_audit = np.random.choice(audit_array, 2, replace=False)
-            for p in self.get_players():
+            paying_round_a = random.randint(1, Constants.num_rounds/2)
+            paying_round_b = random.randint(Constants.num_rounds/2 + 1,  Constants.num_rounds)
+            audit_array_a = np.arange(1, 7, 1)
+            audit_array_b = np.arange(6, 13, 1)
+            random_audit_a = np.random.choice(audit_array_a, 1, replace=False)
+            random_audit_b = np.random.choice(audit_array_b, 1, replace=False)
+            players = self.get_players()
+            for p in players:
                 p.paying_round_a = paying_round_a
                 p.paying_round_b = paying_round_b
-                p.participant.vars['rand_audit_a'] = random_audit[0]
+                p.participant.vars['rand_audit_a'] = random_audit_a[0]
                 p.random_audit_a = p.participant.vars['rand_audit_a']
-                p.participant.vars['rand_audit_b'] = random_audit[1]
+                p.participant.vars['rand_audit_b'] = random_audit_b[0]
                 p.random_audit_b = p.participant.vars['rand_audit_b']
                 p.participant.vars['paying_round_a'] = paying_round_a
                 p.participant.vars['paying_round_b'] = paying_round_b
                 p.participant.vars['condition'] = 'Initialize'
-            # Group Randomly in Round 1.  Maintain previous rounds' groups o/w #
-            self.group_randomly()
+                p.random = random.randint(0, 1000)
+                p.participant.vars['random'] = p.random
+            # Assign condition based on random number. #
+            for p in players:
+                nums = [p.random for p in players]
+                ids = [p.id_in_subsession for p in players]
+                dictionary = dict(zip(ids, nums))
+                print(dictionary)
+                sorted_dict = dict(sorted(dictionary.items(), key=lambda x: x[1]))
+                player_random_nums = [*sorted_dict]
+                midpoint = int(self.session.num_participants / 2)
+                if p.id_in_subsession in player_random_nums[:midpoint]:
+                    p.participant.vars['condition'] = 'Punish_RandomAudit'
+                    p.condition = p.participant.vars['condition']
+                if p.id_in_subsession in player_random_nums[midpoint:]:
+                    p.participant.vars['condition'] = 'Punish_AllRounds'
+                    p.condition = p.participant.vars['condition']
+            # Sort into conditions
+            for p in players:
+                high_players = [p for p in players if p.participant.vars['condition'] == 'Punish_RandomAudit']
+                low_players = [p for p in players if p.participant.vars['condition'] == 'Punish_AllRounds']
+                group_matrix = []
+            # Fill in groups for second part #
+                while high_players:
+                    new_group = [
+                        high_players.pop(),
+                        high_players.pop(),
+                        high_players.pop(),
+                        high_players.pop(),
+                    ]
+                    group_matrix.append(new_group)
+
+                while low_players:
+                    new_group = [
+                        low_players.pop(),
+                        low_players.pop(),
+                        low_players.pop(),
+                        low_players.pop(),
+                    ]
+                    group_matrix.append(new_group)
+                self.set_group_matrix(group_matrix)
         else:
+            # Maintain previous rounds' groups o/w
             self.group_like_round(self.round_number - 1)  # Group like previous round
-
-    def assign_second_half_groupings(self):
-        players = self.get_players()
-        for p in self.get_players():
-            nums = [p.random for p in players]
-            ids = [p.id_in_subsession for p in players]
-            dictionary = dict(zip(ids, nums))
-            sorted_dict = dict(sorted(dictionary.items(), key=lambda x:x[1]))
-            player_random_nums = [*sorted_dict]
-            midpoint = int(self.session.num_participants / 2)
-            if p.id_in_subsession in player_random_nums[:midpoint]:
-                p.participant.vars['bucket'] = "Low"
-                p.participant.vars['condition'] = 'Punish_RandomAudit'
-                p.bucket = 'Low'
-            if p.id_in_subsession in player_random_nums[midpoint:]:
-                p.participant.vars['bucket'] = "High"
-                p.participant.vars['condition'] = 'Punish_AllRounds'
-                p.bucket = 'High'
-
-    def assign_new_groups(self):
-        # == Gather players from equal sized High and Low bins == #
-        players = self.get_players()
-
-        high_players = [p for p in players if p.participant.vars['bucket'] == 'High']
-        low_players = [p for p in players if p.participant.vars['bucket'] == 'Low']
-
-        group_matrix = []
-
-        # == Fill in groups for second part == #
-        while high_players:
-            new_group = [
-                high_players.pop(),
-                high_players.pop(),
-                high_players.pop(),
-                high_players.pop(),
-            ]
-            group_matrix.append(new_group)
-
-        while low_players:
-            new_group = [
-                low_players.pop(),
-                low_players.pop(),
-                low_players.pop(),
-                low_players.pop(),
-            ]
-            group_matrix.append(new_group)
-
-        self.set_group_matrix(group_matrix)
 
     def assign_payoff_display(self):
         players = self.get_players()
@@ -167,11 +167,12 @@ class Group(BaseGroup):
             p.second_p = Constants.payoff_list.item((self.second, self.min))
             p.third_p = Constants.payoff_list.item((self.third, self.min))
             p.fourth_p = Constants.payoff_list.item((self.fourth, self.min))
-            if self.subsession.round_number > Constants.num_roundsr / 2 and vote_sum > 0 and \
-                    self.min != 4 and p.total_sentences == self.min:
+            if vote_sum > 0 and self.min != 4 and p.total_sentences == self.min:
                 p.round_earnings = 0
                 p.counter = 'A'
-            elif self.subsession.round_number < Constants.num_roundsr / 2 + 1:
+            elif p.participant.vars['condition'] == 'Punish_RandomAudit' \
+                    and self.subsession.round_number != p.random_audit_a \
+                    and self.subsession.round_number != p.random_audit_b:
                 p.round_earnings = p.round_earnings
                 p.counter = 'X'
             else:
@@ -185,8 +186,8 @@ class Group(BaseGroup):
         count_x = counters.count('X')
         if count_a > 0:
             display_punish_result = "At least one employee in the firm voted to punish the lowest contributor(s). " \
-                                    "They have earned 0 points for this round. Any employee voting in favor of" \
-                                    "punishment has sacrificed 50% of their original round earnings."
+                                    "They have earned 0 points for this round. Any employee voting in favor of " \
+                                    "punishment has sacrificed 10 points from their original round earnings."
             for p in players:
                 if self.min == self.first:
                     p.first_p = 0
@@ -196,8 +197,11 @@ class Group(BaseGroup):
                     p.third_p = 0
                 if self.min == self.fourth:
                     p.fourth_p = 0
-                if p.vote == 'Yes' :
-                    p.round_earnings = p.round_earnings // 2
+                if p.vote == 'Yes':
+                    p.round_earnings = max(p.round_earnings - Constants.punish_cost, 0)
+                    p.vote_display = "You voted to punish, which costs 10 points."
+                if p.vote == "No":
+                    p.vote_display = "You did not vote to punish."
         elif count_x > 0:
             display_punish_result = " "
         else:
@@ -206,13 +210,11 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
-    bucket = models.StringField()
     belief_index = models.FloatField()
-    belief = models.StringField()
     random = models.FloatField()
     round_id = models.StringField()
     condition = models.StringField()
-    consent = models.StringField(label='', choices=['I consent'], widget=widgets.TextInput)
+    consent = models.StringField(label='', choices=['I consent', 'I consent '], widget=widgets.TextInput)
     paying_round_a = models.IntegerField()
     paying_round_b = models.IntegerField()
     payoff_a = models.IntegerField()
@@ -262,6 +264,7 @@ class Player(BasePlayer):
     average_guess = models.FloatField()
 
     vote = models.StringField(label='', widget=widgets.RadioSelect, choices=['Yes', 'No'])
+    vote_display = models.StringField()
 
     # == Questionnaire variables == #
     age = models.IntegerField(label='', min=0, max=100)
@@ -373,16 +376,12 @@ class Player(BasePlayer):
     confirm_payment = models.StringField(label='', widget=widgets.Textarea, blank=False)
 
     # == Player Functions == #
-    def assign_random_number(self):
-        self.random = random.randint(0, 1000)
-        self.participant.vars['random'] = self.random
-
     def check_correct(self):
         # == Count number of correct sentences entered in round == #
-        self.is_correct1 = (self.submitted_answer1 == Constants.solution1)
-        self.is_correct2 = (self.submitted_answer2 == Constants.solution2)
-        self.is_correct3 = (self.submitted_answer3 == Constants.solution3)
-        self.is_correct4 = (self.submitted_answer4 == Constants.solution4)
+        self.is_correct1 = (self.submitted_answer1 in Constants.solution1)
+        self.is_correct2 = (self.submitted_answer2 in Constants.solution2)
+        self.is_correct3 = (self.submitted_answer3 in Constants.solution3)
+        self.is_correct4 = (self.submitted_answer4 in Constants.solution4)
 
     def sum_sentences(self):
         # == Sum number of correct sentences entered in round == #

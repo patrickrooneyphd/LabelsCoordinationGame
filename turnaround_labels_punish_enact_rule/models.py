@@ -16,15 +16,19 @@ Labels and Turnarounds under Different Punishment Regimes (Unanimous Vote or At 
 class Constants(BaseConstants):
     name_in_url = 'punreg'
     players_per_group = 4
-    num_rounds = 15
-    num_roundsr = 20
-    bonus = 200
+    num_rounds = 12
+    bonus = 10
 
     # == Sentences for each round == #
-    solution1 = 'Earnings are public.'
-    solution2 = 'Old products have been replaced.'
-    solution3 = 'The CEO is on vacation.'
-    solution4 = 'Inventory is full.'
+    solution1 = ['Earnings are public.', 'Earnings are public', 'earnings are public', 'earnings are public.']
+    solution2 = ['Old products have been replaced.', 'Old products have been replaced',
+                 'old products have been replaced', 'old products have been replaced.'
+                 ]
+    solution3 = ['The CEO is on vacation.', 'The CEO is on vacation', 'the ceo is on vacation.',
+                 'the ceo is on vacation', 'the Ceo is on vacation', 'the Ceo is on vacation.',
+                 'The ceo is on vacation.', 'The ceo is on vacation',
+                 ]
+    solution4 = ['Inventory is full.', 'Inventory is full', 'inventory is full.', 'inventory is full']
 
     # == Payoff matrices for treatments == #
     payoff_list = np.array([(200, 200, 200, 200, 200),
@@ -39,66 +43,59 @@ class Subsession(BaseSubsession):
     def creating_session(self):
         if self.round_number == 1:
             # Set Paying Rounds#
-            paying_round_a = random.randint(1, Constants.num_roundsr/2)
-            paying_round_b = random.randint(Constants.num_roundsr/2 + 1,  Constants.num_rounds)
-            for p in self.get_players():
+            paying_round_a = random.randint(1, Constants.num_rounds / 2)
+            paying_round_b = random.randint(Constants.num_rounds / 2 + 1, Constants.num_rounds)
+            players = self.get_players()
+            for p in players:
                 p.paying_round_a = paying_round_a
                 p.paying_round_b = paying_round_b
                 p.participant.vars['paying_round_a'] = paying_round_a
                 p.participant.vars['paying_round_b'] = paying_round_b
                 p.participant.vars['condition'] = 'Initialize'
-            # Group Randomly in Round 1.  Maintain previous rounds' groups o/w #
-            self.group_randomly()
+                p.random = random.randint(0, 1000)
+                p.participant.vars['random'] = p.random
+            # Assign condition based on random number. #
+            for p in players:
+                nums = [p.random for p in players]
+                ids = [p.id_in_subsession for p in players]
+                dictionary = dict(zip(ids, nums))
+                print(dictionary)
+                sorted_dict = dict(sorted(dictionary.items(), key=lambda x: x[1]))
+                player_random_nums = [*sorted_dict]
+                midpoint = int(self.session.num_participants / 2)
+                if p.id_in_subsession in player_random_nums[:midpoint]:
+                    p.participant.vars['condition'] = 'Punish_Maj'
+                    p.condition = p.participant.vars['condition']
+                if p.id_in_subsession in player_random_nums[midpoint:]:
+                    p.participant.vars['condition'] = 'Punish_AtLeast1'
+                    p.condition = p.participant.vars['condition']
+            # Sort into conditions
+            for p in players:
+                high_players = [p for p in players if p.participant.vars['condition'] == 'Punish_Maj']
+                low_players = [p for p in players if p.participant.vars['condition'] == 'Punish_AtLeast1']
+                group_matrix = []
+                # Fill in groups for second part #
+                while high_players:
+                    new_group = [
+                        high_players.pop(),
+                        high_players.pop(),
+                        high_players.pop(),
+                        high_players.pop(),
+                    ]
+                    group_matrix.append(new_group)
+
+                while low_players:
+                    new_group = [
+                        low_players.pop(),
+                        low_players.pop(),
+                        low_players.pop(),
+                        low_players.pop(),
+                    ]
+                    group_matrix.append(new_group)
+                self.set_group_matrix(group_matrix)
         else:
+            # Maintain previous rounds' groups o/w
             self.group_like_round(self.round_number - 1)  # Group like previous round
-
-    def assign_second_half_groupings(self):
-        players = self.get_players()
-        for p in self.get_players():
-            nums = [p.random for p in players]
-            ids = [p.id_in_subsession for p in players]
-            dictionary = dict(zip(ids, nums))
-            sorted_dict = dict(sorted(dictionary.items(), key=lambda x:x[1]))
-            player_random_nums = [*sorted_dict]
-            midpoint = int(self.session.num_participants / 2)
-            if p.id_in_subsession in player_random_nums[:midpoint]:
-                p.participant.vars['bucket'] = "Low"
-                p.participant.vars['condition'] = 'Punish_Unanimous'
-                p.bucket = 'Low'
-            if p.id_in_subsession in player_random_nums[midpoint:]:
-                p.participant.vars['bucket'] = "High"
-                p.participant.vars['condition'] = 'Punish_AtLeast1'
-                p.bucket = 'High'
-
-    def assign_new_groups(self):
-        # == Gather players from equal sized High and Low bins == #
-        players = self.get_players()
-
-        high_players = [p for p in players if p.participant.vars['bucket'] == 'High']
-        low_players = [p for p in players if p.participant.vars['bucket'] == 'Low']
-
-        group_matrix = []
-
-        # == Fill in groups for second part == #
-        while high_players:
-            new_group = [
-                high_players.pop(),
-                high_players.pop(),
-                high_players.pop(),
-                high_players.pop(),
-            ]
-            group_matrix.append(new_group)
-
-        while low_players:
-            new_group = [
-                low_players.pop(),
-                low_players.pop(),
-                low_players.pop(),
-                low_players.pop(),
-            ]
-            group_matrix.append(new_group)
-
-        self.set_group_matrix(group_matrix)
 
     def assign_payoff_display(self):
         players = self.get_players()
@@ -136,8 +133,9 @@ class Group(BaseGroup):
     def punish_regime_display(self):
         players = self.get_players()
         for p in players:
-            if p.participant.vars['condition'] == 'Punish_Unanimous':
-                punish_regime = 'if all employees vote yes (i.e., all four employees vote for punishment)'
+            if p.participant.vars['condition'] == 'Punish_Maj':
+                punish_regime = 'if the majority of employees vote yes (i.e., three or four' \
+                                ' employees vote for punishment)'
                 p.participant.vars['punish_regime'] = punish_regime
             if p.participant.vars['condition'] == 'Punish_AtLeast1':
                 punish_regime = 'if one or more employees vote yes (i.e., at least one employee votes for punishment)'
@@ -161,29 +159,25 @@ class Group(BaseGroup):
             p.second_p = Constants.payoff_list.item((self.second, self.min))
             p.third_p = Constants.payoff_list.item((self.third, self.min))
             p.fourth_p = Constants.payoff_list.item((self.fourth, self.min))
-            if p.participant.vars['condition'] == 'Punish_Unanimous' and self.subsession.round_number > \
-                    Constants.num_roundsr / 2 and vote_sum == 4 and self.min != 4 and p.total_sentences == self.min:
+            if p.participant.vars['condition'] == 'Punish_Maj' and vote_sum > 2 and self.min != 4 \
+                    and p.total_sentences == self.min:
                 p.round_earnings = 0
-                p.counter = 'U'
-            elif p.participant.vars['condition'] == 'Punish_AtLeast1' and self.subsession.round_number > \
-                    Constants.num_roundsr / 2 and vote_sum > 0 and self.min != 4 and p.total_sentences == self.min:
+                p.counter = 'M'
+            elif p.participant.vars['condition'] == 'Punish_AtLeast1' and vote_sum > 0 and self.min != 4 \
+                    and p.total_sentences == self.min:
                 p.round_earnings = 0
                 p.counter = 'A'
-            elif self.subsession.round_number < Constants.num_roundsr / 2 + 1:
-                p.round_earnings = p.round_earnings
-                p.counter = 'X'
             else:
                 p.round_earnings = p.round_earnings
-                p.counter = 'C'
+                p.counter = 'X'
 
     def show_result(self):
         players = self.get_players()
         counters = [p.counter for p in players]
-        count_u = counters.count('U')
+        count_m = counters.count('M')
         count_a = counters.count('A')
-        count_x = counters.count('X')
-        if count_u > 0:
-            display_punish_result = "The firm has unanimously agreed to punish the lowest contributor(s). " \
+        if count_m > 0:
+            display_punish_result = "The firm has agreed to punish the lowest contributor(s). " \
                                           "They have earned 0 points for this round."
             for p in players:
                 if self.min == self.first:
@@ -194,6 +188,10 @@ class Group(BaseGroup):
                     p.third_p = 0
                 if self.min == self.fourth:
                     p.fourth_p = 0
+                if p.vote == 'Yes':
+                    p.vote_display = "You voted to punish."
+                if p.vote == 'No':
+                    p.vote_display = "You did not vote to punish."
         elif count_a > 0:
             display_punish_result = "At least one person voted to punish the lowest contributor(s). " \
                                           "They have earned 0 points for this round."
@@ -206,21 +204,22 @@ class Group(BaseGroup):
                     p.third_p = 0
                 if self.min == self.fourth:
                     p.fourth_p = 0
-        elif count_x > 0:
-            display_punish_result = " "
+                if p.vote == 'Yes':
+                    p.vote_display = "You voted to punish."
+                if p.vote == 'No':
+                    p.vote_display = "You did not vote to punish."
         else:
-            display_punish_result = "No changes have been made to any employee's earnings"
+            display_punish_result = "No changes have been made to any employee's earnings."
         self.display_punish_result = display_punish_result
 
 
 class Player(BasePlayer):
-    bucket = models.StringField()
     belief_index = models.FloatField()
     belief = models.StringField()
     random = models.FloatField()
     round_id = models.StringField()
     condition = models.StringField()
-    consent = models.StringField(label='', choices=['I consent'], widget=widgets.TextInput)
+    consent = models.StringField(label='', choices=['I consent', 'I consent '], widget=widgets.TextInput)
     paying_round_a = models.IntegerField()
     paying_round_b = models.IntegerField()
     payoff_a = models.IntegerField()
@@ -268,6 +267,7 @@ class Player(BasePlayer):
     average_guess = models.FloatField()
 
     vote = models.StringField(label='', widget=widgets.RadioSelect, choices=['Yes', 'No'])
+    vote_display = models.StringField()
 
     # == Questionnaire variables == #
     age = models.IntegerField(label='', min=0, max=100)
@@ -379,16 +379,12 @@ class Player(BasePlayer):
     confirm_payment = models.StringField(label='', widget=widgets.Textarea, blank=False)
 
     # == Player Functions == #
-    def assign_random_number(self):
-        self.random = random.randint(0, 1000)
-        self.participant.vars['random'] = self.random
-
     def check_correct(self):
         # == Count number of correct sentences entered in round == #
-        self.is_correct1 = (self.submitted_answer1 == Constants.solution1)
-        self.is_correct2 = (self.submitted_answer2 == Constants.solution2)
-        self.is_correct3 = (self.submitted_answer3 == Constants.solution3)
-        self.is_correct4 = (self.submitted_answer4 == Constants.solution4)
+        self.is_correct1 = (self.submitted_answer1 in Constants.solution1)
+        self.is_correct2 = (self.submitted_answer2 in Constants.solution2)
+        self.is_correct3 = (self.submitted_answer3 in Constants.solution3)
+        self.is_correct4 = (self.submitted_answer4 in Constants.solution4)
 
     def sum_sentences(self):
         # == Sum number of correct sentences entered in round == #

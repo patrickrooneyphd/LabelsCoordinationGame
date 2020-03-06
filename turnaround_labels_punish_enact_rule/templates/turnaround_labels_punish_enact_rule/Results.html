@@ -8,13 +8,14 @@
 {% block content %}
 <p>
     In this round:
-    <br><br><b>{{ group.display_punish_result }}</b>
-    <br><br><br><br>The four players in your firm produced <b>{{ group.first }},
+    <br><br>{{ group.display_punish_result }}
+    <br><br>The four players in your firm produced <b>{{ group.first }},
     {{ group.second }},
     {{ group.third }}, and
     {{ group.fourth }}</b> sentences.
     <br><br>You typed <b>{{ player.total_sentences }}</b> sentence(s).
     <br><br>The smallest number of sentences in your firm was <b>{{ group.min }}</b> sentences.
+    <br><br>{{ player.vote_display }}
     <br><br><u>Therefore, your payoff is <b>{{ player.round_earnings }}</b>.</u>
     <br><br><br>Below is the history of sentence production in your firm.
     <br><br>

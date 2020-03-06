@@ -9,6 +9,9 @@ class Introduction(Page):
 
     def is_displayed(self):
         return self.round_number == 1
+
+    def before_next_page(self):
+        self.group.punish_regime_display()
     pass
 
 
@@ -32,59 +35,18 @@ class Matrix(Page):
 
     def is_displayed(self):
         return self.round_number == 1
-
-    def before_next_page(self):
-        self.player.assign_random_number()
-    pass
-
-
-class AssignNewGroupsInfo(Page):
-    def is_displayed(self):
-        return self.round_number == Constants.num_roundsr / 2 + 1
-    pass
-
-
-class AssignMaintainGroups(WaitPage):
-    wait_for_all_groups = True
-
-    def is_displayed(self):
-        return self.round_number > (Constants.num_roundsr / 2)
-
-    def after_all_players_arrive(self):
-        self.subsession.assign_new_groups()
     pass
 
 
 class PunishInfo(Page):
-
     def is_displayed(self):
-        return self.round_number == (Constants.num_roundsr / 2 + 1) and \
-               (self.participant.vars['condition'] == 'Punish_AtLeast1' or 'Punish_Unanimous')
-
-    def before_next_page(self):
-        self.group.punish_regime_display()
-    pass
-
-
-class PunishVote(Page):
-    form_model = 'player'
-    form_fields = ['vote']
-
-    def is_displayed(self):
-        return self.round_number > (Constants.num_roundsr / 2)
+        return (self.participant.vars['condition'] == 'Punish_Maj' or 'Punish_AtLeast1') \
+               and self.round_number == 1
 
     def vars_for_template(self):
         return {
             'punish_regime': self.participant.vars['punish_regime'],
         }
-    pass
-
-
-class SecondPartWait(WaitPage):
-    wait_for_all_groups = True
-
-    def is_displayed(self):
-        return self.round_number > (Constants.num_roundsr / 2)
     pass
 
 
@@ -99,7 +61,6 @@ class Round(Page):
 
 
 class ResultsWaitPage(WaitPage):
-
     def after_all_players_arrive(self):
         self.group.set_payoffs()
         self.group.show_result()
@@ -119,38 +80,39 @@ class BeliefsAboutOtherPlayers(Page):
     pass
 
 
-class BeliefsWaitPage(WaitPage):
+class PunishVote(Page):
+    form_model = 'player'
+    form_fields = ['vote']
+
+    def is_displayed(self):
+        return self.participant.vars['condition'] == 'Punish_Maj' \
+               or self.participant.vars['condition'] == 'Punish_AtLeast1'
+
+    def vars_for_template(self):
+        return {
+            'punish_regime': self.participant.vars['punish_regime'],
+        }
+    pass
+
+
+class ResultsWaitPage2(WaitPage):
+
+    def after_all_players_arrive(self):
+        self.group.set_payoffs()
+        self.group.show_result()
+    pass
+
+
+class GroupsWait(WaitPage):
     wait_for_all_groups = True
 
     def is_displayed(self):
-        return self.round_number == 1
-
-    def after_all_players_arrive(self):
-        self.subsession.assign_second_half_groupings()
+        return self.round_number > 0
     pass
 
 
 class Results(Page):
-    timeout_seconds = 15
-
-    def is_displayed(self):
-        return self.round_number < (Constants.num_roundsr / 2 + 1)
-
-    def vars_for_template(self):
-        return {
-            'player_in_all_rounds': self.player.in_all_rounds(),
-        }
-
-    def before_next_page(self):
-        self.player.set_payoffs()
-    pass
-
-
-class ResultsSecondPart(Page):
     timeout_seconds = 20
-
-    def is_displayed(self):
-        return self.round_number > (Constants.num_roundsr / 2)
 
     def vars_for_template(self):
         return {
@@ -246,24 +208,21 @@ class Thanks(Page):
 
 page_sequence = [
     Introduction,
-    Practice,
+    # Practice,
     WaitForInstructions,
-    Matrix,
-    AssignNewGroupsInfo,
-    AssignMaintainGroups,
     PunishInfo,
-    PunishVote,
-    SecondPartWait,
+    Matrix,
     Round,
     ResultsWaitPage,
     BeliefsAboutOtherPlayers,
-    BeliefsWaitPage,
+    PunishVote,
+    ResultsWaitPage2,
+    GroupsWait,
     Results,
-    ResultsSecondPart,
-    Questionnaire,
+    # Questionnaire,
     AversionPage,
-    OpenComments,
-    DebriefingSheet,
+    # OpenComments,
+    # DebriefingSheet,
     PaymentWaitPage,
     FinalPayment,
     Thanks

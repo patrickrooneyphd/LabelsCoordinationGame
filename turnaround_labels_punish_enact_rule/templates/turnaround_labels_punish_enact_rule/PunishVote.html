@@ -8,8 +8,13 @@
 {% block content %}
 
     <p>
-        You may vote to punish the person with the lowest number of sentences in this round. <b>If the punishment
-        policy is enacted, the employee typing the lowest number of sentences will earn 0 points in the round</b>.
+        <b>In this round, the employees in your firm typed {{ group.first }}, {{ group.second }}, {{ group.third }}, and
+            {{ group.fourth }} sentences.</b>
+        <br><br> <b>You typed {{ player.total_sentences }} sentences.</b>
+
+        <br><br><br>You may vote to punish the person with the lowest number of sentences in this round.
+        <b>If the punishment policy is enacted, the employee typing the lowest number of sentences will
+        earn 0 points in the round</b>.
         If there is more than one employee at the lowest number of sentences, all employees
         typing the lowest number will be punished. If all employees correctly type 4 sentences, there will be no
         punishment even if the punishment policy is enacted.

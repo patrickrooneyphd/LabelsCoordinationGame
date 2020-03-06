@@ -36,10 +36,10 @@ SESSION_CONFIGS = [
         'use_browser_bots': False
     },
     {
-        'name': 'turnaround_labels_punish_unan_atleast1',
-        'display_name': "Labels and Turnarounds_punish_unan_atleast1",
+        'name': 'turnaround_labels_punish_enact_rule',
+        'display_name': "Labels and Turnarounds_punish_enact_rule",
         'num_demo_participants': 16,
-        'app_sequence': ['turnaround_labels_punish_unan_atleast1'],
+        'app_sequence': ['turnaround_labels_punish_enact_rule'],
         'use_browser_bots': False
     },
     {

@@ -17,8 +17,9 @@
         round</b>. If there is more than one employee at the lowest number of sentences, all employees
         typing the lowest number will be punished.
         <br><br>Choosing to punish is costly to the punisher. Namely, <b>any employee voting in favor of punishment
-        will have their round's earnings reduced by 50%.</b> Earnings reductions will only occur in rounds in which
-        you vote to punish.
+        will have their round's earnings reduced by {{ Constants.punish_cost }} points.</b> Earnings reductions will
+        only occur in rounds in which
+        you vote to punish. You cannot earn less than zero points in any round.
         <br><br><b>Punishment will be enacted if one or more employees vote yes (i.e., at least one employee votes
         for punishment).</b> If all employees correctly type 4 sentences, there will be no punishment (or reduction
         in punisher earnings) even if the punishment policy is enacted. The outcome of the vote will be displayed

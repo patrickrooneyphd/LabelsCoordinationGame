@@ -9,6 +9,9 @@ class Introduction(Page):
 
     def is_displayed(self):
         return self.round_number == 1
+
+    def before_next_page(self):
+        self.group.punish_regime_display()
     pass
 
 
@@ -27,47 +30,10 @@ class WaitForInstructions(WaitPage):
         return self.round_number == 1
 
 
-class Matrix(Page):
-    timeout_seconds = 30
-
-    def is_displayed(self):
-        return self.round_number == 1
-
-    def before_next_page(self):
-        self.player.assign_random_number()
-    pass
-
-
-class AssignNewGroupsInfo(Page):
-    def is_displayed(self):
-        return self.round_number == Constants.num_roundsr / 2 + 1
-    pass
-
-
-class AssignMaintainGroups(WaitPage):
-    wait_for_all_groups = True
-
-    def is_displayed(self):
-        return self.round_number > (Constants.num_roundsr / 2)
-
-    def after_all_players_arrive(self):
-        self.subsession.assign_new_groups()
-
-
-class ClickNext(Page):  # Need this page to match punish regime text to condition
-    def is_displayed(self):
-        return self.round_number == Constants.num_roundsr / 2 + 1
-
-    def before_next_page(self):
-        self.group.punish_regime_display()  # Assign the punishment regime for the approp. condition.
-    pass
-
-
 class PunishInfo(Page):
-
     def is_displayed(self):
-        return self.round_number == (Constants.num_roundsr / 2 + 1) and \
-               (self.participant.vars['condition'] == 'Punish_RandomAudit' or 'Punish_AllRounds')
+        return (self.participant.vars['condition'] == 'Punish_RandomAudit' or 'Punish_AllRounds') \
+               and self.round_number == 1
 
     def vars_for_template(self):
         return {
@@ -76,11 +42,11 @@ class PunishInfo(Page):
     pass
 
 
-class SecondPartWait(WaitPage):
-    wait_for_all_groups = True
+class Matrix(Page):
+    timeout_seconds = 30
 
     def is_displayed(self):
-        return self.round_number > (Constants.num_roundsr / 2)
+        return self.round_number == 1
     pass
 
 
@@ -95,30 +61,6 @@ class Round(Page):
 
 
 class ResultsWaitPage(WaitPage):
-
-    def after_all_players_arrive(self):
-        self.group.set_payoffs()
-        self.group.show_result()
-    pass
-
-
-class PunishVote(Page):
-    form_model = 'player'
-    form_fields = ['vote']
-
-    def is_displayed(self):
-        return self.round_number > (Constants.num_roundsr / 2) \
-               and (self.participant.vars['condition'] == 'Punish_AllRounds' or
-                    self.round_number == self.participant.vars['rand_audit_a'] or
-                    self.round_number == self.participant.vars['rand_audit_b'])
-    pass
-
-
-class ResultsWaitPage2(WaitPage):
-
-    def is_displayed(self):
-        return self.round_number > (Constants.num_roundsr / 2)
-
     def after_all_players_arrive(self):
         self.group.set_payoffs()
         self.group.show_result()
@@ -138,38 +80,35 @@ class BeliefsAboutOtherPlayers(Page):
     pass
 
 
-class BeliefsWaitPage(WaitPage):
+class PunishVote(Page):
+    form_model = 'player'
+    form_fields = ['vote']
+
+    def is_displayed(self):
+        return self.participant.vars['condition'] == 'Punish_AllRounds' \
+               or self.round_number == self.participant.vars['rand_audit_a'] \
+               or self.round_number == self.participant.vars['rand_audit_b']
+    pass
+
+
+class ResultsWaitPage2(WaitPage):
+
+    def after_all_players_arrive(self):
+        self.group.set_payoffs()
+        self.group.show_result()
+    pass
+
+
+class GroupsWait(WaitPage):
     wait_for_all_groups = True
 
     def is_displayed(self):
-        return self.round_number == 1
-
-    def after_all_players_arrive(self):
-        self.subsession.assign_second_half_groupings()
+        return self.round_number > 0
     pass
 
 
 class Results(Page):
-    timeout_seconds = 15
-
-    def is_displayed(self):
-        return self.round_number < (Constants.num_roundsr / 2 + 1)
-
-    def vars_for_template(self):
-        return {
-            'player_in_all_rounds': self.player.in_all_rounds(),
-        }
-
-    def before_next_page(self):
-        self.player.set_payoffs()
-    pass
-
-
-class ResultsSecondPart(Page):
     timeout_seconds = 20
-
-    def is_displayed(self):
-        return self.round_number > (Constants.num_roundsr / 2)
 
     def vars_for_template(self):
         return {
@@ -267,20 +206,15 @@ page_sequence = [
     Introduction,
     # Practice,
     WaitForInstructions,
-    Matrix,
-    AssignNewGroupsInfo,
-    AssignMaintainGroups,
-    ClickNext,
     PunishInfo,
-    SecondPartWait,
+    Matrix,
     Round,
     ResultsWaitPage,
+    BeliefsAboutOtherPlayers,
     PunishVote,
     ResultsWaitPage2,
-    BeliefsAboutOtherPlayers,
-    BeliefsWaitPage,
+    GroupsWait,
     Results,
-    ResultsSecondPart,
     # Questionnaire,
     AversionPage,
     # OpenComments,
